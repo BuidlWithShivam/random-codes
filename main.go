@@ -11,7 +11,7 @@ func main() {
 }
 
 func minHeapTest() {
-	minHeap := NewMinHeap[int, Test](5)
+	minHeap := NewHeap[int, Test](5, false)
 	minHeap.Insert(1, Test{name: "A"})
 	minHeap.PrintHeap()
 	minHeap.Insert(2, Test{name: "B"})
