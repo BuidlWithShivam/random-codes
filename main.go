@@ -2,14 +2,35 @@ package main
 
 import "fmt"
 
+type Test struct {
+	name string
+}
+
 func main() {
-	lruCacheTest()
+	minHeapTest()
+}
+
+func minHeapTest() {
+	minHeap := NewMinHeap[int, Test](5)
+	minHeap.Insert(1, Test{name: "A"})
+	minHeap.PrintHeap()
+	minHeap.Insert(2, Test{name: "B"})
+	minHeap.PrintHeap()
+	minHeap.Insert(3, Test{name: "C"})
+	minHeap.PrintHeap()
+	minHeap.Insert(4, Test{name: "D"})
+	minHeap.PrintHeap()
+	minHeap.Insert(0, Test{name: "E"})
+	minHeap.PrintHeap()
+
+	pair := minHeap.Peek()
+	fmt.Println(*pair)
+	pair = minHeap.Pop()
+	fmt.Println(*pair)
+	minHeap.PrintHeap()
 }
 
 func lruCacheTest() {
-	type Test struct {
-		name string
-	}
 	lruCache := NewLRUCache[string, Test](3)
 	lruCache.Put("A", Test{name: "1"})
 	lruCache.Put("B", Test{name: "2"})
