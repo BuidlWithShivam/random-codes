@@ -6,10 +6,6 @@ import (
 	"sync"
 )
 
-type KeyConstraint interface {
-	comparable
-}
-
 type LRUCache[K KeyConstraint, T any] struct {
 	capacity int
 	size     int

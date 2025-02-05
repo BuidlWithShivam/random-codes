@@ -7,7 +7,7 @@ type Test struct {
 }
 
 func main() {
-	minHeapTest()
+	lfuCacheTest()
 }
 
 func minHeapTest() {
@@ -51,4 +51,35 @@ func lruCacheTest() {
 
 	lruCache.Put("E", Test{name: "5"})
 	lruCache.list.PrintList()
+
 }
+
+func lfuCacheTest() {
+	cache := NewLFUCache[string, Test](3)
+	cache.Put("A", Test{name: "1"})
+	cache.Put("B", Test{name: "2"})
+	cache.Put("C", Test{name: "3"})
+	cache.Put("D", Test{name: "4"})
+
+	cache.order.PrintHeap()
+
+	value, err := cache.Get("B")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Value for B in cache: ", value)
+
+	err = cache.Remove("C")
+
+	cache.order.PrintHeap()
+
+	cache.Put("E", Test{name: "5"})
+	cache.order.PrintHeap()
+
+	cache.Get("D")
+	cache.Get("D")
+
+	cache.order.PrintHeap()
+}
+
+// build a library with comparable can be used as generic

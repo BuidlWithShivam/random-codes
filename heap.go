@@ -47,12 +47,11 @@ func swap[K cmp.Ordered, T any](first, second *Pair[K, T]) (*Pair[K, T], *Pair[K
 	return second, first
 }
 
-func (h *Heap[K, T]) Insert(key K, val T) {
+func (h *Heap[K, T]) Insert(key K, val T) int {
 	pair := &Pair[K, T]{key, val}
-
 	if len(h.heap) == h.capacity {
 		if pair.Compare(h.Peek(), h.maxHeap) {
-			return
+			return -1
 		} else {
 			h.heap[0] = pair
 			currentIndex := 0
@@ -70,7 +69,7 @@ func (h *Heap[K, T]) Insert(key K, val T) {
 				}
 
 				if scope == currentIndex {
-					break
+					return currentIndex
 				}
 				h.heap[currentIndex], h.heap[scope] = swap(h.heap[currentIndex], h.heap[scope])
 				currentIndex = scope
@@ -83,6 +82,7 @@ func (h *Heap[K, T]) Insert(key K, val T) {
 			h.heap[currentIndex], h.heap[parent(currentIndex)] = swap(h.heap[currentIndex], h.heap[parent(currentIndex)])
 			currentIndex = parent(currentIndex)
 		}
+		return currentIndex
 	}
 }
 
@@ -123,26 +123,40 @@ func (h *Heap[K, T]) Pop() *Pair[K, T] {
 	return pair
 }
 
-func Heapify[K cmp.Ordered, T any](heap []*Pair[K, T], index int, minHeap bool) {
+func (h *Heap[K, T]) IncreaseKey(index int, key K) int {
+	h.heap[index].key = key
+	if !h.maxHeap {
+		return Heapify[K, T](h.heap, index, h.maxHeap)
+	} else {
+		currentIndex := index
+		for currentIndex > 0 && h.heap[currentIndex].Compare(h.heap[parent(currentIndex)], h.maxHeap) {
+			h.heap[currentIndex], h.heap[parent(currentIndex)] = swap(h.heap[currentIndex], h.heap[parent(currentIndex)])
+			currentIndex = parent(currentIndex)
+		}
+		return currentIndex
+	}
+}
+
+func Heapify[K cmp.Ordered, T any](heap []*Pair[K, T], index int, maxHeap bool) int {
 	leftIndex := left(index)
 	rightIndex := right(index)
 	var scope int // smallest if min heap, largest if max heap
 	scope = index
 
-	if leftIndex < len(heap) && heap[leftIndex].Compare(heap[scope], minHeap) {
+	if leftIndex < len(heap) && heap[leftIndex].Compare(heap[scope], maxHeap) {
 		scope = leftIndex
 	}
 
-	if rightIndex < len(heap) && heap[rightIndex].Compare(heap[scope], minHeap) {
+	if rightIndex < len(heap) && heap[rightIndex].Compare(heap[scope], maxHeap) {
 		scope = rightIndex
 	}
 
 	if scope == index {
-		return
+		return index
 	}
 
 	heap[index], heap[scope] = swap(heap[index], heap[scope])
-	Heapify[K, T](heap, scope, minHeap)
+	return Heapify[K, T](heap, scope, maxHeap)
 }
 
 func BuildHeap[K cmp.Ordered, T any](heap []*Pair[K, T], minHeap bool) []*Pair[K, T] {
