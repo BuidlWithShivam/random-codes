@@ -1,7 +1,8 @@
-package main
+package datastructures
 
 import (
 	"errors"
+	"random-codes/utils"
 )
 
 type LFUCache[K KeyConstraint, T any] struct {
@@ -23,7 +24,7 @@ func NewLFUCache[K KeyConstraint, T any](capacity int) *LFUCache[K, T] {
 func (l *LFUCache[K, T]) Get(key K) (T, error) {
 	value, ok := l.cache[key]
 	if !ok {
-		return getZero[T](), errors.New("key not found")
+		return utils.GetZero[T](), errors.New("key not found")
 	}
 	l.cacheToHeap[key] = l.order.IncreaseKey(l.cacheToHeap[key], l.order.heap[l.cacheToHeap[key]].key+1)
 	return value, nil

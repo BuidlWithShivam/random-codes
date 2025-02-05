@@ -1,8 +1,9 @@
-package main
+package datastructures
 
 import (
 	"errors"
 	"fmt"
+	"random-codes/utils"
 	"sync"
 )
 
@@ -40,7 +41,7 @@ func (c *LRUCache[K, T]) Put(key K, data T) {
 func (c *LRUCache[K, T]) Get(key K) (T, error) {
 	node, ok := c.values[key]
 	if !ok {
-		return getZero[T](), errors.New(fmt.Sprintf("Key not found in cache : ", key))
+		return utils.GetZero[T](), errors.New(fmt.Sprintf("Key not found in cache : ", key))
 	}
 	c.mutex.Lock()
 	c.list.MoveToFront(node)

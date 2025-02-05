@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"random-codes/datastructures"
+)
 
 type Test struct {
 	name string
@@ -11,7 +14,7 @@ func main() {
 }
 
 func minHeapTest() {
-	minHeap := NewHeap[int, Test](5, false)
+	minHeap := datastructures.NewHeap[int, Test](5, false)
 	minHeap.Insert(1, Test{name: "A"})
 	minHeap.PrintHeap()
 	minHeap.Insert(2, Test{name: "B"})
@@ -31,7 +34,7 @@ func minHeapTest() {
 }
 
 func lruCacheTest() {
-	lruCache := NewLRUCache[string, Test](3)
+	lruCache := datastructures.NewLRUCache[string, Test](3)
 	lruCache.Put("A", Test{name: "1"})
 	lruCache.Put("B", Test{name: "2"})
 	lruCache.Put("C", Test{name: "3"})
@@ -55,7 +58,7 @@ func lruCacheTest() {
 }
 
 func lfuCacheTest() {
-	cache := NewLFUCache[string, Test](3)
+	cache := datastructures.NewLFUCache[string, Test](3)
 	cache.Put("A", Test{name: "1"})
 	cache.Put("B", Test{name: "2"})
 	cache.Put("C", Test{name: "3"})
