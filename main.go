@@ -39,21 +39,21 @@ func lruCacheTest() {
 	lruCache.Put("B", Test{name: "2"})
 	lruCache.Put("C", Test{name: "3"})
 	lruCache.Put("D", Test{name: "4"})
-	lruCache.list.PrintList()
+	lruCache.List.PrintList()
 
 	value, err := lruCache.Get("B")
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println("Value for B in cache: ", value)
-	lruCache.list.PrintList()
+	lruCache.List.PrintList()
 
 	err = lruCache.Remove("C")
 
-	lruCache.list.PrintList()
+	lruCache.List.PrintList()
 
 	lruCache.Put("E", Test{name: "5"})
-	lruCache.list.PrintList()
+	lruCache.List.PrintList()
 
 }
 
@@ -64,7 +64,7 @@ func lfuCacheTest() {
 	cache.Put("C", Test{name: "3"})
 	cache.Put("D", Test{name: "4"})
 
-	cache.order.PrintHeap()
+	cache.Order.PrintHeap()
 
 	value, err := cache.Get("B")
 	if err != nil {
@@ -74,15 +74,15 @@ func lfuCacheTest() {
 
 	err = cache.Remove("C")
 
-	cache.order.PrintHeap()
+	cache.Order.PrintHeap()
 
 	cache.Put("E", Test{name: "5"})
-	cache.order.PrintHeap()
+	cache.Order.PrintHeap()
 
 	cache.Get("D")
 	cache.Get("D")
 
-	cache.order.PrintHeap()
+	cache.Order.PrintHeap()
 }
 
 // build a library with comparable can be used as generic
